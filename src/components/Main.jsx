@@ -1,0 +1,11 @@
+const Main = () => {
+    return (
+        <section>
+            <h1>Main</h1>
+
+            <p>This is the main page</p>
+        </section>
+    );
+}
+
+export default Main;
