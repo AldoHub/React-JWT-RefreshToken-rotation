@@ -38,14 +38,14 @@ const Login = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'credentials': 'include'
             },
+            credentials: 'include',
             body: JSON.stringify({
                 user,
                 pwd
             })
         }).catch(err => {
-            console.log(err);
+            console.log("ERROR: ", err);
             return null;
         });
 

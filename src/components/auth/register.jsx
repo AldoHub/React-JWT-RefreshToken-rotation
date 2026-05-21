@@ -72,12 +72,12 @@ const Register = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'credentials': 'include'
             },
             body: JSON.stringify({
                 user,
                 pwd
-            })
+            }),
+            credentials: 'include'
         }).catch(err => {
             console.log(err);
             return null;

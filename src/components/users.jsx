@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
+import useRefreshToken from '../hooks/useRefresToken';
 
 const Users = () => {
    const [users, setUsers] = useState([]);
-   const { auth } = useAuth();
-
+   const {auth, setAuth} = useAuth();
+   const refresh = useRefreshToken();
+   
    //get the Users
    useEffect(() => {
     let mounted = true;
@@ -13,25 +15,55 @@ const Users = () => {
     const controller = new AbortController();
     const { signal } = controller;
     
+    
     fetch('http://localhost:3000/employees', {
         signal,
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'credentials': 'include',
             'Authorization': `Bearer ${auth.accessToken}`
-        }
+        },
+        credentials: 'include'
         })
         .then(res => res.json())
-        .then(data => {
+        .then(async data => {
 
-            console.log(data);
+            if(data.message){
+                //set the new token
+
+                let token = await refresh();
+                console.log(token);
+
+                //make a new request with the new token
+                fetch('http://localhost:3000/employees', {
+                    signal,
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    credentials: 'include'
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (mounted) {
+                        setUsers(data);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+
+
+            }
+
             if (mounted) {
                 setUsers(data);
             }
         })
         .catch(err => {
             console.log(err);
+           
         });
  
 
