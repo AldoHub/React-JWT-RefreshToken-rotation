@@ -7,6 +7,7 @@ const Register = React.lazy(() => import("./components/auth/Register"));
 const Login = React.lazy(() => import("./components/auth/Login"));
 const Main = React.lazy(() => import("./components/Main"));
 const Users = React.lazy(() => import("./components/users"));
+const PersistLogin = React.lazy(() => import("./components/PersistLogin"));
 
 
 const _Routes = () => {
@@ -18,12 +19,14 @@ const _Routes = () => {
             <Route path="/auth/register" element={<Register />} />
             <Route path="/auth/login" element={<Login />} />
             
+            {/* PersistLogin is a component that persists the user login */}
             {/* RequireAuth is a component that checks if the user is logged in */}
-            <Route element={<RequireAuth />}>
-                <Route path="/" element={<Main />} />   
-                <Route path="/users" element={<Users />} />
+           <Route element={<PersistLogin />}>
+                <Route element={<RequireAuth />}>
+                    <Route path="/" element={<Main />} />   
+                    <Route path="/users" element={<Users />} />
+                </Route>
             </Route>
-
 
        
            
